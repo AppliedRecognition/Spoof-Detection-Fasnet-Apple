@@ -31,11 +31,11 @@ let face: Face // Face detected in the image
 let apiKey: String // Your API key
 let url: URL // Service URL
 
-let spoofDeviceDetection = SpoofDeviceDetection(apiKey: apiKey, url: url)
+let spoofDetection = FASnetSpoofDetection(apiKey: apiKey, url: url)
 guard let cgImage = uiImage.cgImage, let image = Image(cgImage: cgImage) else {
     fatalError("Image conversion failed")
 }
 Task {
-    let isSpoof = try await spoofDeviceDetection.isSpoofInImage(image, regionOfInterest: face.bounds)
+    let isSpoof = try await spoofDetection.isSpoofInImage(image, regionOfInterest: face.bounds)
 }
 ```
