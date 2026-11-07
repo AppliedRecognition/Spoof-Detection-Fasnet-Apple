@@ -1,5 +1,19 @@
 # Spoof Detection using FASnet Model
 
+> **Deprecated, and this repository is archived.** No new versions will be published.
+>
+> It was a cloud FASnet spoof-detection model, and it is not the liveness classifier the
+> Ver-ID 3 pipeline uses: FASnet classifies three classes at 112×112, against the two
+> classes at 224×224 the Stage 2 classifier works on. Nothing in the current stack depends
+> on it, and its only consumer was `Spoof-Detection-Fusion-Apple`, which is archived for the
+> same reason.
+>
+> Use [`Spoof-Device-Detection-Ver-ID-3-Apple`](https://github.com/AppliedRecognition/Spoof-Device-Detection-Ver-ID-3-Apple)
+> instead.
+>
+> Archiving makes the repository read-only. It stays clonable and its tags stay resolvable,
+> so an existing `Package.resolved` that pins a version here keeps working.
+
 Detects spoof in images
 
 ## Installation
