@@ -56,6 +56,7 @@ final class FASnetSpoofDetectionTests: XCTestCase {
     }
     
     func testDetectSpoofInCloud() async throws {
+        try XCTSkipIf(Self.cloudAPIKey == nil, "Set VERID_CLOUD_API_KEY to run the tests that call the cloud service.")
         HTTPStubs.removeAllStubs()
         HTTPStubs.setEnabled(false)
         guard let image = self.testImage else {
@@ -98,13 +99,25 @@ final class FASnetSpoofDetectionTests: XCTestCase {
         guard let url = URL(string: config.url) else {
             throw XCTSkip()
         }
-        return FASnetSpoofDetection(apiKey: config.apiKey, url: url)
+        // Constructed with whatever key is available, including none. The stubbed tests never
+        // reach the network, so only the cloud test needs a real key, and it skips itself.
+        // Skipping here would skip the whole class, because `setUpWithError` calls this.
+        return FASnetSpoofDetection(apiKey: Self.cloudAPIKey ?? "", url: url)
+    }
+
+    /// The cloud API key, taken from the environment.
+    ///
+    /// It used to sit in `Resources/config.json`, which is committed — and this repository is
+    /// public — so a live key for a metered service was republished in every clone. The endpoint
+    /// stays in the committed config; the key does not. Without one the cloud tests skip, which
+    /// is what a test needing a credential should do on a machine that has none.
+    private static var cloudAPIKey: String? {
+        ProcessInfo.processInfo.environment["VERID_CLOUD_API_KEY"].flatMap { $0.isEmpty ? nil : $0 }
     }
 }
 
 fileprivate struct Config: Decodable {
     
-    let apiKey: String
     let url: String
     
 }
